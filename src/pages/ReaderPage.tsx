@@ -45,6 +45,16 @@ export default function ReaderPage() {
 
   const convexAudiobooks = useQuery(api.audiobooks.getAudiobooks)
 
+  // selectBook precisa estar definida ANTES do useEffect que a utiliza
+  const selectBook = useCallback((book: Audiobook) => {
+    setCurrentBook(book)
+    setAudioUrl(book.audio_url)
+    setBookInfo(book.title, 'Capítulo 1', book.author_name)
+    setSkipToTimestamp(book.skip_to_timestamp || 0)
+    if (book.total_duration) setDuration(book.total_duration)
+    if (book.voice_label) setVoice(book.voice_id || book.id, book.voice_label)
+  }, [setAudioUrl, setBookInfo, setSkipToTimestamp, setDuration, setVoice])
+
   // Sincroniza o Convex com o estado local para compatibilidade
   useEffect(() => {
     if (convexAudiobooks !== undefined) {
@@ -66,7 +76,7 @@ export default function ReaderPage() {
       }
       setLoading(false)
     }
-  }, [convexAudiobooks, voiceChosen])
+  }, [convexAudiobooks, voiceChosen, selectBook])
 
   const handleLogout = useCallback(async () => {
     await supabase.auth.signOut()
@@ -127,15 +137,6 @@ export default function ReaderPage() {
     description: (b as any).voice_description as string | undefined,
   }))
 
-  const selectBook = (book: Audiobook) => {
-    setCurrentBook(book)
-    setAudioUrl(book.audio_url)
-    setBookInfo(book.title, 'Capítulo 1', book.author_name)
-    setSkipToTimestamp(book.skip_to_timestamp || 0)
-    if (book.total_duration) setDuration(book.total_duration)
-    if (book.voice_label) setVoice(book.voice_id || book.id, book.voice_label)
-  }
-
   const handleVoiceChange = (opt: any) => {
     const book = audiobooks.find(b => b.id === opt.audiobookId)
     if (!book) return
@@ -180,7 +181,7 @@ export default function ReaderPage() {
       />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col min-w-0 pb-20 md:pb-16 /* Espaço extra p/ mobile evitar sobreposição com player */">
+      <div className="flex-1 flex flex-col min-w-0 pb-20 md:pb-16">
 
         {/* Floating Voice Selector Button */}
         {currentView === 'reader' && (
