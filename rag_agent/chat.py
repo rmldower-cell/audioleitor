@@ -116,7 +116,7 @@ Pergunta do leitor: {question}"""
     chat_history.append(types.Content(role="user", parts=[types.Part(text=user_message)]))
 
     response = gemini.models.generate_content(
-        model="gemini-1.5-flash",
+        model="gemini-2.5-flash",
         contents=chat_history,
         config=types.GenerateContentConfig(
             system_instruction=SYSTEM_PROMPT,
