@@ -5,7 +5,7 @@ import LoginPage from '@/pages/LoginPage'
 import ReaderPage from '@/pages/ReaderPage'
 import type { Session } from '@supabase/supabase-js'
 
-function ProtectedRoute({ children, session }: { children: React.ReactNode; session: Session | null }) {
+function ProtectedRoute({ children }: { children: React.ReactNode; session?: Session | null }) {
   // if (!session) return <Navigate to="/login" replace />
   return <>{children}</>
 }

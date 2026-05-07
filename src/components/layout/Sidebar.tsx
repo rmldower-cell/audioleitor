@@ -6,7 +6,6 @@ import {
   X,
   CheckCircle2,
   LogOut,
-  Settings,
   ChevronRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
