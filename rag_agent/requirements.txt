@@ -1,0 +1,7 @@
+# Dependências do Agente RAG "Conversa com o Livro"
+google-genai>=1.0.0
+pinecone>=3.0.0
+python-dotenv>=1.0.0
+pypdf>=4.0.0
+fastapi>=0.115.0
+uvicorn[standard]>=0.30.0
