@@ -28,7 +28,6 @@ export default function ExpertIAPage({ bookTitle }: ExpertIAPageProps) {
   const [loading, setLoading] = useState(false)
   const [showSuggestions, setShowSuggestions] = useState(true)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const _sessionId = useRef(crypto.randomUUID?.() || Date.now().toString(36))
 
   useEffect(() => {
     if (scrollRef.current) {
