@@ -24,14 +24,16 @@ interface VoiceSelectorProps {
 
 const getSphereStyles = (voice: VoiceOption) => {
   const name = voice.label.toLowerCase()
+  // Fábio = autor = verde esmeralda
   if (name.includes('fábio') || name.includes('fabio')) {
-    return 'bg-[radial-gradient(circle_at_30%_30%,_#a7f3d0,_#10b981_60%,_#064e3b)] shadow-emerald-500/30'
+    return 'bg-[radial-gradient(circle_at_35%_35%,_#6ee7b7,_#059669_50%,_#064e3b_85%,_#022c22)] shadow-emerald-900/20'
   }
+  // Femininas = rosa/roxo
   if (voice.gender === 'female' || name.includes('mulher')) {
-    return 'bg-[radial-gradient(circle_at_30%_30%,_#fbcfe8,_#db2777_60%,_#831843)] shadow-pink-500/30'
+    return 'bg-[radial-gradient(circle_at_35%_35%,_#f0abfc,_#a855f7_50%,_#7e22ce_85%,_#3b0764)] shadow-purple-900/20'
   }
-  // Padrão: Azul (para Cris, Sid e outras vozes masculinas)
-  return 'bg-[radial-gradient(circle_at_30%_30%,_#bfdbfe,_#3b82f6_60%,_#1e3a8a)] shadow-blue-500/30'
+  // Masculinas (Cris, Sid, etc.) = azul
+  return 'bg-[radial-gradient(circle_at_35%_35%,_#93c5fd,_#3b82f6_50%,_#1e40af_85%,_#172554)] shadow-blue-900/20'
 }
 
 function VoiceGrid({
@@ -77,14 +79,14 @@ function VoiceGrid({
         </div>
       </header>
 
-      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12">
-        <div className="flex flex-wrap justify-center gap-8 md:gap-12">
+      <main className="flex-1 max-w-4xl mx-auto w-full px-4 flex flex-col items-center justify-center">
+        <div className="flex flex-wrap justify-center gap-6 md:gap-10">
           {voices.map((voice) => {
             const isActive = selected === voice.id
             const sphereStyles = getSphereStyles(voice)
 
             return (
-              <div key={voice.id} className="flex flex-col items-center gap-4 w-28 sm:w-32">
+              <div key={voice.id} className="flex flex-col items-center gap-3 w-24 sm:w-28">
                 {/* Esfera / Botão */}
                 <button
                   onClick={() => setSelected(voice.id)}
@@ -92,21 +94,21 @@ function VoiceGrid({
                 >
                   {/* Anel de seleção (se ativo) */}
                   <div
-                    className={`absolute inset-[-12px] rounded-full border-[3px] transition-all duration-300 ${
+                    className={`absolute inset-[-8px] rounded-full border-2 transition-all duration-300 ${
                       isActive ? 'border-primary scale-100 opacity-100' : 'border-transparent scale-90 opacity-0'
                     }`}
                   />
                   
                   {/* Esfera 3D */}
                   <div
-                    className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-xl transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-2 ${sphereStyles}`}
+                    className={`w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-md transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-1 ${sphereStyles}`}
                   >
                     {/* Botão Play Preview invisível até o hover/focus */}
                     <div 
                       onClick={(e) => playPreview(e)}
                       className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
                     >
-                      <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
                         <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M8 5v14l11-7z" />
                         </svg>
@@ -115,15 +117,15 @@ function VoiceGrid({
                   </div>
 
                   {isActive && (
-                    <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-lg transform scale-110">
-                      <Check className="w-3.5 h-3.5 text-primary-foreground" />
+                    <div className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-primary flex items-center justify-center shadow-md">
+                      <Check className="w-3 h-3 text-primary-foreground" />
                     </div>
                   )}
                 </button>
 
                 {/* Informações da Voz */}
                 <div className="text-center">
-                  <span className={`block font-semibold transition-colors duration-200 ${isActive ? 'text-primary' : 'text-foreground'}`}>
+                  <span className={`block text-sm font-semibold transition-colors duration-200 ${isActive ? 'text-primary' : 'text-foreground'}`}>
                     {voice.label}
                   </span>
                   {voice.description && (
