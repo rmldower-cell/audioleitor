@@ -35,6 +35,18 @@ const GENDER_STYLES = {
   },
 }
 
+const getSphereStyles = (voice: VoiceOption) => {
+  const name = voice.label.toLowerCase()
+  if (name.includes('fábio') || name.includes('fabio')) {
+    return 'bg-[radial-gradient(circle_at_30%_30%,_#a7f3d0,_#10b981_60%,_#064e3b)] shadow-emerald-500/30'
+  }
+  if (voice.gender === 'female' || name.includes('mulher')) {
+    return 'bg-[radial-gradient(circle_at_30%_30%,_#fbcfe8,_#db2777_60%,_#831843)] shadow-pink-500/30'
+  }
+  // Padrão: Azul (para Cris, Sid e outras vozes masculinas)
+  return 'bg-[radial-gradient(circle_at_30%_30%,_#bfdbfe,_#3b82f6_60%,_#1e3a8a)] shadow-blue-500/30'
+}
+
 function VoiceGrid({
   voices,
   onSelectVoice,
@@ -50,6 +62,14 @@ function VoiceGrid({
   const handleConfirm = () => {
     const voice = voices.find((v) => v.id === selected)
     if (voice) onSelectVoice(voice)
+  }
+
+  const playPreview = (e: React.MouseEvent, voice: VoiceOption) => {
+    e.stopPropagation()
+    // Como é um rascunho, tocar um áudio genérico
+    const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
+    audio.play()
+    setTimeout(() => audio.pause(), 3000) // Toca só 3 segundos
   }
 
   return (
@@ -70,48 +90,67 @@ function VoiceGrid({
         </div>
       </header>
 
-      <main className="flex-1 max-w-3xl mx-auto w-full px-4 py-8">
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      <main className="flex-1 max-w-4xl mx-auto w-full px-4 py-12">
+        <div className="flex flex-wrap justify-center gap-8 md:gap-12">
           {voices.map((voice) => {
             const isActive = selected === voice.id
-            const gender = voice.gender || 'male'
-            const styles = GENDER_STYLES[gender]
+            const sphereStyles = getSphereStyles(voice)
 
             return (
-              <button
-                key={voice.id}
-                onClick={() => setSelected(voice.id)}
-                className={`
-                  group relative flex flex-col items-center gap-3 p-5 rounded-2xl border-2 transition-all duration-200
-                  bg-card/50 hover:bg-card/80
-                  ${isActive
-                    ? `${styles.activeBorder} bg-card shadow-lg shadow-primary/5`
-                    : 'border-border/40 hover:border-border'
-                  }
-                `}
-              >
-                <div className={`w-14 h-14 rounded-2xl ${styles.bg} border ${styles.border} flex items-center justify-center transition-transform group-hover:scale-105`}>
-                  <User className={`w-7 h-7 ${styles.icon}`} />
-                </div>
-                <span className="text-sm font-semibold text-foreground">{voice.label}</span>
-                {voice.description && (
-                  <span className="text-[10px] text-muted-foreground leading-tight text-center -mt-1">
-                    {voice.description}
-                  </span>
-                )}
-                {isActive && (
-                  <div className="absolute top-2 right-2">
-                    <div className="w-5 h-5 rounded-full bg-primary flex items-center justify-center">
-                      <Check className="w-3 h-3 text-primary-foreground" />
+              <div key={voice.id} className="flex flex-col items-center gap-4 w-28 sm:w-32">
+                {/* Esfera / Botão */}
+                <button
+                  onClick={() => setSelected(voice.id)}
+                  className="relative group focus:outline-none"
+                >
+                  {/* Anel de seleção (se ativo) */}
+                  <div
+                    className={`absolute inset-[-12px] rounded-full border-[3px] transition-all duration-300 ${
+                      isActive ? 'border-primary scale-100 opacity-100' : 'border-transparent scale-90 opacity-0'
+                    }`}
+                  />
+                  
+                  {/* Esfera 3D */}
+                  <div
+                    className={`w-20 h-20 sm:w-24 sm:h-24 rounded-full shadow-xl transition-transform duration-300 ease-out group-hover:scale-110 group-hover:-translate-y-2 ${sphereStyles}`}
+                  >
+                    {/* Botão Play Preview invisível até o hover/focus */}
+                    <div 
+                      onClick={(e) => playPreview(e, voice)}
+                      className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
+                    >
+                      <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
+                        <svg className="w-4 h-4 text-white ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M8 5v14l11-7z" />
+                        </svg>
+                      </div>
                     </div>
                   </div>
-                )}
-              </button>
+
+                  {isActive && (
+                    <div className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-lg transform scale-110">
+                      <Check className="w-3.5 h-3.5 text-primary-foreground" />
+                    </div>
+                  )}
+                </button>
+
+                {/* Informações da Voz */}
+                <div className="text-center">
+                  <span className={`block font-semibold transition-colors duration-200 ${isActive ? 'text-primary' : 'text-foreground'}`}>
+                    {voice.label}
+                  </span>
+                  {voice.description && (
+                    <span className="block text-[10px] text-muted-foreground leading-tight mt-1">
+                      {voice.description}
+                    </span>
+                  )}
+                </div>
+              </div>
             )
           })}
         </div>
 
-        <p className="text-center text-xs text-muted-foreground mt-8 flex items-center justify-center gap-2">
+        <p className="text-center text-xs text-muted-foreground mt-16 flex items-center justify-center gap-2">
           <Volume2 className="w-3.5 h-3.5" />
           Cada voz possui uma narração única do audiobook completo
         </p>
