@@ -14,6 +14,7 @@ export interface Chapter {
   num: number
   title: string
   startPage: number
+  audioTimestamp?: number
 }
 
 interface SidebarProps {

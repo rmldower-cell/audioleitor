@@ -20,6 +20,7 @@ export default defineSchema({
                     num: v.number(),
                     title: v.string(),
                     startPage: v.number(),
+                    audioTimestamp: v.optional(v.number()),
                 })
             )
         ),
