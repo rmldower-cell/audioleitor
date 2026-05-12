@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, Mic2, ArrowLeft, User, Volume2 } from 'lucide-react'
+import { Check, Mic2, ArrowLeft, Volume2 } from 'lucide-react'
 import { useAudioStore } from '@/stores/audioStore'
 import { Button } from '@/components/ui/button'
 
@@ -20,20 +20,7 @@ interface VoiceSelectorProps {
   compact?: boolean
 }
 
-const GENDER_STYLES = {
-  male: {
-    icon: 'text-blue-400',
-    bg: 'bg-blue-400/10',
-    border: 'border-blue-400/20',
-    activeBorder: 'border-blue-400',
-  },
-  female: {
-    icon: 'text-pink-400',
-    bg: 'bg-pink-400/10',
-    border: 'border-pink-400/20',
-    activeBorder: 'border-pink-400',
-  },
-}
+
 
 const getSphereStyles = (voice: VoiceOption) => {
   const name = voice.label.toLowerCase()
@@ -64,7 +51,7 @@ function VoiceGrid({
     if (voice) onSelectVoice(voice)
   }
 
-  const playPreview = (e: React.MouseEvent, voice: VoiceOption) => {
+  const playPreview = (e: React.MouseEvent) => {
     e.stopPropagation()
     // Como é um rascunho, tocar um áudio genérico
     const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3')
@@ -116,7 +103,7 @@ function VoiceGrid({
                   >
                     {/* Botão Play Preview invisível até o hover/focus */}
                     <div 
-                      onClick={(e) => playPreview(e, voice)}
+                      onClick={(e) => playPreview(e)}
                       className="absolute inset-0 flex items-center justify-center bg-black/40 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200 cursor-pointer"
                     >
                       <div className="w-8 h-8 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center">
