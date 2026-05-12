@@ -25,6 +25,7 @@ interface Audiobook {
   skip_to_timestamp: number
   total_duration: number | null
   chapters: Chapter[] | null
+  sync_json?: { start: number; end: number; text: string; page: number; spanIndex: number }[] | null
 }
 
 export default function ReaderPage() {
@@ -67,6 +68,7 @@ export default function ReaderPage() {
         skip_to_timestamp: b.skip_to_timestamp || 0,
         total_duration: b.total_duration || null,
         chapters: b.chapters || null,
+        sync_json: b.sync_json || null,
       })) as Audiobook[]
 
       setAudiobooks(mappedBooks)
@@ -85,12 +87,25 @@ export default function ReaderPage() {
   const handleChapterClick = useCallback((ch: Chapter) => {
     setActiveChapter(ch.num)
     setCurrentView('reader')
+
+    // Sincronizar Áudio
+    if (audioRef.current && currentBook?.sync_json) {
+      // Procura a primeira palavra que está na página do capítulo
+      const targetSync = currentBook.sync_json.find((s) => s.page === ch.startPage)
+      if (targetSync) {
+        audioRef.current.currentTime = targetSync.start
+        if (audioRef.current.paused) {
+          audioRef.current.play().catch(console.warn)
+        }
+      }
+    }
+
     // Scroll no PDF até a página do capítulo
     setTimeout(() => {
       const scrollFn = (window as any).__pdfScrollToPage
       if (scrollFn) scrollFn(ch.startPage)
     }, 100)
-  }, [])
+  }, [currentBook])
 
   const handlePageChange = useCallback((page: number) => {
     if (!currentBook?.chapters) return

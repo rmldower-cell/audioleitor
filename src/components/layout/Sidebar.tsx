@@ -114,7 +114,7 @@ export default function Sidebar({
                   `}
                 >
                   <span className="truncate text-left">
-                    Cap {ch.num}: {ch.title}
+                    {ch.num === 0 ? ch.title : `Cap ${ch.num}: ${ch.title}`}
                   </span>
                   {isActive ? (
                     <CheckCircle2 className="w-3.5 h-3.5 text-primary shrink-0" />

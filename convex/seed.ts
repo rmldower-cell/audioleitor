@@ -3,12 +3,13 @@ import { mutation } from "./_generated/server";
 export default mutation({
     handler: async (ctx) => {
         const chapters = [
-            { num: 1, title: "Introdução", startPage: 15 },
-            { num: 2, title: "Riscos Psicossociais", startPage: 17 },
-            { num: 3, title: "Gestão e NR-01", startPage: 21 },
-            { num: 4, title: "Gestão Prática", startPage: 23 },
-            { num: 5, title: "Proposição de Framework", startPage: 31 },
-            { num: 6, title: "Etapas do Framework", startPage: 34 },
+            { num: 0, title: "Prefácio", startPage: 5 },
+            { num: 1, title: "Introdução", startPage: 14 },
+            { num: 2, title: "Riscos Psicossociais", startPage: 16 },
+            { num: 3, title: "Gestão e NR-01", startPage: 20 },
+            { num: 4, title: "Gestão Prática", startPage: 22 },
+            { num: 5, title: "Proposição de Framework", startPage: 30 },
+            { num: 6, title: "Etapas do Framework", startPage: 33 },
             { num: 7, title: "Conclusão", startPage: 69 }
         ];
 
