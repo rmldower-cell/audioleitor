@@ -181,10 +181,10 @@ export default function ReaderPage() {
         {currentView === 'reader' && audiobooks.length > 1 && (
           <button
             onClick={() => setShowVoiceModal(true)}
-            className="fixed bottom-[80px] right-4 md:right-8 z-40 bg-background/80 backdrop-blur-md border border-border/50 shadow-xl px-4 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-muted transition-all active:scale-95 text-foreground cursor-pointer"
+            className="fixed bottom-[90px] sm:bottom-[80px] right-3 sm:right-8 z-40 bg-background/80 backdrop-blur-md border border-border/50 shadow-xl px-3 sm:px-4 py-2 sm:py-2.5 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-muted transition-all active:scale-95 text-foreground cursor-pointer"
           >
             <Mic2 className="w-4 h-4 text-primary" />
-            <span>Trocar Voz</span>
+            <span className="hidden sm:inline">Trocar Voz</span>
           </button>
         )}
 

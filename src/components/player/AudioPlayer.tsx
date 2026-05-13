@@ -143,11 +143,11 @@ export default function AudioPlayer({ audioRef }: AudioPlayerProps) {
 
   return (
     <footer className="sticky bottom-0 z-50 border-t border-border/50 bg-background/95 backdrop-blur-md">
-      <div className="max-w-5xl mx-auto px-4">
+      <div className="max-w-5xl mx-auto px-3 sm:px-4">
         {/* Progress Bar */}
         <div
           ref={progressRef}
-          className="h-1.5 -mt-0.5 cursor-pointer group relative"
+          className="h-2 sm:h-1.5 -mt-0.5 cursor-pointer group relative touch-none"
           onClick={handleProgressClick}
         >
           <div className="absolute inset-0 bg-muted rounded-full overflow-hidden">
@@ -163,10 +163,20 @@ export default function AudioPlayer({ audioRef }: AudioPlayerProps) {
           />
         </div>
 
+        {/* Mobile: Tempo abaixo da barra de progresso */}
+        <div className="flex items-center justify-between sm:hidden pt-1">
+          <span className="text-[10px] text-muted-foreground tabular-nums">
+            {formatTime(currentTime)}
+          </span>
+          <span className="text-[10px] text-muted-foreground tabular-nums">
+            {formatTime(duration)}
+          </span>
+        </div>
+
         {/* Controls */}
-        <div className="h-16 flex items-center justify-between gap-4">
-          {/* Left — Book Info */}
-          <div className="flex-1 min-w-0">
+        <div className="h-14 sm:h-16 flex items-center justify-between gap-2 sm:gap-4">
+          {/* Left — Book Info (esconde no mobile para dar espaço) */}
+          <div className="hidden sm:flex flex-1 min-w-0 flex-col">
             <p className="text-sm font-medium text-foreground truncate">
               {bookTitle}
             </p>
@@ -176,21 +186,22 @@ export default function AudioPlayer({ audioRef }: AudioPlayerProps) {
           </div>
 
           {/* Center — Controls */}
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5 sm:gap-1 flex-1 sm:flex-none justify-center">
             {/* Skip to Content */}
             {skipToTimestamp > 0 && currentTime < skipToTimestamp && (
               <Button
                 variant="ghost"
                 size="sm"
                 onClick={handleSkipToContent}
-                className="text-primary text-xs h-8 px-2 hover:bg-primary/10"
+                className="text-primary text-[10px] sm:text-xs h-7 sm:h-8 px-1.5 sm:px-2 hover:bg-primary/10"
               >
-                <FastForward className="w-3.5 h-3.5 mr-1" />
-                Pular Prefácio
+                <FastForward className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-0.5 sm:mr-1" />
+                <span className="hidden xs:inline">Pular Prefácio</span>
+                <span className="xs:hidden">Pular</span>
               </Button>
             )}
 
-            <Button variant="ghost" size="icon" onClick={() => seekRelative(-10)} className="h-9 w-9">
+            <Button variant="ghost" size="icon" onClick={() => seekRelative(-10)} className="h-8 w-8 sm:h-9 sm:w-9">
               <SkipBack className="w-4 h-4" />
             </Button>
 
@@ -204,27 +215,28 @@ export default function AudioPlayer({ audioRef }: AudioPlayerProps) {
               {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-0.5" />}
             </Button>
 
-            <Button variant="ghost" size="icon" onClick={() => seekRelative(10)} className="h-9 w-9">
+            <Button variant="ghost" size="icon" onClick={() => seekRelative(10)} className="h-8 w-8 sm:h-9 sm:w-9">
               <SkipForward className="w-4 h-4" />
             </Button>
-          </div>
 
-          {/* Right — Time & Speed */}
-          <div className="flex-1 flex items-center justify-end gap-3">
-            <span className="text-xs text-muted-foreground tabular-nums">
-              {formatTime(currentTime)} / {formatTime(duration)}
-            </span>
-
+            {/* Speed — no mobile fica junto dos controles */}
             <Button
               variant="outline"
               size="sm"
               onClick={cyclePlaybackRate}
-              className="h-7 px-2 text-xs font-mono min-w-[3rem]"
+              className="h-7 px-1.5 sm:px-2 text-[10px] sm:text-xs font-mono min-w-[2.5rem] sm:min-w-[3rem] ml-0.5"
             >
               {playbackRate}x
             </Button>
+          </div>
 
-            <Volume2 className="w-4 h-4 text-muted-foreground hidden sm:block" />
+          {/* Right — Time & Speed (desktop only) */}
+          <div className="hidden sm:flex flex-1 items-center justify-end gap-3">
+            <span className="text-xs text-muted-foreground tabular-nums">
+              {formatTime(currentTime)} / {formatTime(duration)}
+            </span>
+
+            <Volume2 className="w-4 h-4 text-muted-foreground" />
           </div>
         </div>
       </div>

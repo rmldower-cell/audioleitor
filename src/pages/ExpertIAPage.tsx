@@ -88,7 +88,7 @@ export default function ExpertIAPage({ bookTitle }: ExpertIAPageProps) {
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-80px)] max-w-3xl mx-auto w-full">
+    <div className="flex flex-col h-[calc(100dvh-80px)] max-w-3xl mx-auto w-full">
       {/* Header */}
       <div className="border-b border-border/50 px-4 py-4">
         <div className="flex items-center gap-3">

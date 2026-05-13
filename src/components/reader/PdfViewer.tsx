@@ -175,7 +175,7 @@ export default function PdfViewer({ pdfUrl, onPageChange }: PdfViewerProps) {
       <div
         ref={scrollContainerRef}
         className="flex-1 overflow-y-auto overscroll-contain rounded-2xl border border-border/50 bg-card/30"
-        style={{ maxHeight: 'calc(100vh - 160px)' }}
+        style={{ maxHeight: 'calc(100dvh - 160px)' }}
       >
         {/* Loading com progresso de render */}
         {loading && (

@@ -90,7 +90,7 @@ export default function RagChatWidget() {
 
       {/* Janela de Chat */}
       {isOpen && (
-        <div className="fixed bottom-24 right-4 w-[350px] h-[500px] max-h-[80vh] flex flex-col bg-card/95 backdrop-blur-xl border border-border/50 rounded-2xl shadow-2xl z-50 overflow-hidden" style={{ animation: 'fadeInUp 0.3s ease-out' }}>
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-4 sm:w-[350px] sm:h-[500px] sm:max-h-[80vh] flex flex-col bg-card/95 backdrop-blur-xl sm:border sm:border-border/50 sm:rounded-2xl shadow-2xl z-50 overflow-hidden" style={{ animation: 'fadeInUp 0.3s ease-out' }}>
           {/* Header */}
           <div className="h-14 border-b border-border/50 bg-primary/10 flex items-center justify-between px-4">
             <div className="flex items-center gap-2">
