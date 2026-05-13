@@ -32,7 +32,7 @@ export default function ReaderPage() {
   const [audiobooks, setAudiobooks] = useState<Audiobook[]>([])
   const [currentBook, setCurrentBook] = useState<Audiobook | null>(null)
   const [loading, setLoading] = useState(true)
-  const [voiceChosen, setVoiceChosen] = useState(false)
+  const [showVoiceModal, setShowVoiceModal] = useState(false)
   const [currentView, setCurrentView] = useState<'reader' | 'expert'>('reader')
   const [activeChapter, setActiveChapter] = useState<number | null>(null)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -72,13 +72,12 @@ export default function ReaderPage() {
       })) as Audiobook[]
 
       setAudiobooks(mappedBooks)
-      if (mappedBooks.length === 1 && !voiceChosen) {
+      if (mappedBooks.length >= 1 && !currentBook) {
         selectBook(mappedBooks[0])
-        setVoiceChosen(true)
       }
       setLoading(false)
     }
-  }, [convexAudiobooks, voiceChosen, selectBook])
+  }, [convexAudiobooks, currentBook, selectBook])
 
   const handleLogout = useCallback(async () => {
     await supabase.auth.signOut()
@@ -154,22 +153,6 @@ export default function ReaderPage() {
     selectBook(book)
   }
 
-  // Tela de seleção de voz (antes do reader)
-  if (!voiceChosen && audiobooks.length > 1) {
-    return (
-      <div className="dark">
-        <VoiceSelector
-          voices={voiceOptions}
-          onSelectVoice={(v) => {
-            handleVoiceChange(v)
-            setVoiceChosen(true)
-          }}
-          compact={false}
-        />
-      </div>
-    )
-  }
-
   if (!currentBook) {
     return <LoadingOverlay visible={true} />
   }
@@ -195,14 +178,26 @@ export default function ReaderPage() {
       <div className="flex-1 flex flex-col min-w-0 pb-20 md:pb-16">
 
         {/* Floating Voice Selector Button */}
-        {currentView === 'reader' && (
+        {currentView === 'reader' && audiobooks.length > 1 && (
           <button
-            onClick={() => setVoiceChosen(false)}
+            onClick={() => setShowVoiceModal(true)}
             className="fixed bottom-[80px] right-4 md:right-8 z-40 bg-background/80 backdrop-blur-md border border-border/50 shadow-xl px-4 py-2.5 rounded-full text-sm font-medium flex items-center gap-2 hover:bg-muted transition-all active:scale-95 text-foreground cursor-pointer"
           >
             <Mic2 className="w-4 h-4 text-primary" />
             <span>Trocar Voz</span>
           </button>
+        )}
+
+        {/* Voice Selector Modal */}
+        {showVoiceModal && (
+          <VoiceSelector
+            voices={voiceOptions}
+            onSelectVoice={(v) => {
+              handleVoiceChange(v)
+              setShowVoiceModal(false)
+            }}
+            compact={false}
+          />
         )}
 
         {/* View Switch */}

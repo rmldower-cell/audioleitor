@@ -60,14 +60,29 @@ export default function AudioPlayer({ audioRef }: AudioPlayerProps) {
       if (!isDragging.current) {
         setCurrentTime(audio.currentTime)
       }
+      // Fallback: se a duração conhecida é menor que currentTime, atualiza
+      if (audio.currentTime > duration && isFinite(audio.currentTime)) {
+        setDuration(audio.currentTime)
+      }
     }
-    const onLoadedMetadata = () => setDuration(audio.duration)
+    const onLoadedMetadata = () => {
+      if (isFinite(audio.duration) && audio.duration > 0) {
+        setDuration(audio.duration)
+      }
+    }
+    // MP3 VBR: o browser descobre a duração real depois
+    const onDurationChange = () => {
+      if (isFinite(audio.duration) && audio.duration > 0) {
+        setDuration(audio.duration)
+      }
+    }
     const onPlay = () => setIsPlaying(true)
     const onPause = () => setIsPlaying(false)
     const onEnded = () => setIsPlaying(false)
 
     audio.addEventListener('timeupdate', onTimeUpdate)
     audio.addEventListener('loadedmetadata', onLoadedMetadata)
+    audio.addEventListener('durationchange', onDurationChange)
     audio.addEventListener('play', onPlay)
     audio.addEventListener('pause', onPause)
     audio.addEventListener('ended', onEnded)
@@ -75,11 +90,12 @@ export default function AudioPlayer({ audioRef }: AudioPlayerProps) {
     return () => {
       audio.removeEventListener('timeupdate', onTimeUpdate)
       audio.removeEventListener('loadedmetadata', onLoadedMetadata)
+      audio.removeEventListener('durationchange', onDurationChange)
       audio.removeEventListener('play', onPlay)
       audio.removeEventListener('pause', onPause)
       audio.removeEventListener('ended', onEnded)
     }
-  }, [audioRef, setCurrentTime, setDuration, setIsPlaying])
+  }, [audioRef, setCurrentTime, setDuration, setIsPlaying, duration])
 
   const togglePlay = useCallback(() => {
     const audio = audioRef.current
